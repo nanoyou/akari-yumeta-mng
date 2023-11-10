@@ -71,6 +71,7 @@ const getGender = (genderStr: string) => {
   return gender
 }
 
+// format usage time
 const formatDuration = (sec: number) => {
   const formattedHours = String(Math.floor(sec / 3600)).padStart(2, '0')
   const formattedMinutes = String(Math.floor((sec % 3600) / 60)).padStart(

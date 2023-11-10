@@ -42,42 +42,42 @@ onMounted(() => {
             value: 142,
             name: '6-8岁',
             itemStyle: {
-              color: '#ff0000'
+              color: '#fac858'
             }
           },
           {
             value: 179,
             name: '9-10岁',
             itemStyle: {
-              color: '#00ff00'
+              color: '#9fe080'
             }
           },
           {
             value: 223,
             name: '10-12岁',
             itemStyle: {
-              color: '#ffff00'
+              color: '#fac858'
             }
           },
           {
             value: 323,
             name: '12-14岁',
             itemStyle: {
-              color: '#0000ff'
+              color: '#9fe080'
             }
           },
           {
             value: 236,
             name: '14-16岁',
             itemStyle: {
-              color: '#ffff00'
+              color: '#fac858'
             }
           },
           {
             value: 136,
             name: '16+',
             itemStyle: {
-              color: '#00ff00'
+              color: '#9fe080'
             }
           }
         ]

@@ -4,9 +4,7 @@
   <div class="screen1">
     <div class="top">
       <ul>
-        <li>
-          <!-- <use-period></use-period> -->
-        </li>
+        <li>动态统计</li>
         <li>
           <div class="statistics">
             <div class="part">

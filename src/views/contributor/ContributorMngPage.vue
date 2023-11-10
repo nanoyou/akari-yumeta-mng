@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { Check, Close } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
+
 const childrenData = [
   {
     id: '22',
@@ -15,6 +19,8 @@ const childrenData = [
     donationAmount: 100050
   }
 ]
+
+// format gender
 const getGender = (genderStr: string) => {
   let gender: string
   switch (genderStr) {
@@ -31,6 +37,7 @@ const getGender = (genderStr: string) => {
   return gender
 }
 
+// format usage time
 const formatDuration = (sec: number) => {
   const formattedHours = String(Math.floor(sec / 3600)).padStart(2, '0')
   const formattedMinutes = String(Math.floor((sec % 3600) / 60)).padStart(
@@ -39,6 +46,19 @@ const formatDuration = (sec: number) => {
   )
   const formattedSeconds = String(sec % 60).padStart(2, '0')
   return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`
+}
+
+// disabled account
+const stateChange = (row: any) => {
+  ElMessage.success('已设置该账户状态为' + (row.state ? '可用' : '禁用'))
+}
+
+// view detail
+const detailBoxVisible = ref(false)
+const userDetail = ref({})
+const viewDetail = (row: any) => {
+  userDetail.value = row
+  detailBoxVisible.value = true
 }
 </script>
 
@@ -62,21 +82,67 @@ const formatDuration = (sec: number) => {
         </el-table-column>
         <el-table-column prop="donationAmount" label="捐赠总额">
           <template #default="{ row }">
-            {{ row.donationAmount / 100 }}
+            {{ row.donationAmount / 100 }} 元
           </template>
         </el-table-column>
-        <el-table-column prop="usageDuration" label="使用时长">
+        <el-table-column prop="state" label="账户是否可用">
           <template #default="{ row }">
-            {{ formatDuration(row.usageDuration) }}
+            <el-switch
+              v-model="row.state"
+              :active-icon="Check"
+              :inactive-icon="Close"
+              @change="stateChange(row)"
+            />
           </template>
         </el-table-column>
         <el-table-column fixed="right" label="操作">
-          <template #default>
-            <el-button link type="primary" size="small">Detail</el-button>
-            <el-button link type="primary" size="small">Edit</el-button>
+          <template #default="{ row }">
+            <el-button link type="primary" size="small" @click="viewDetail(row)"
+              >捐助者详情</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
+    </div>
+
+    <!-- detail dialog -->
+    <div class="detail-dialog">
+      <el-dialog v-model="detailBoxVisible" title="用户详情">
+        <div class="detail">
+          <el-form
+            label-position="right"
+            label-width="100px"
+            :model="userDetail"
+            style="max-width: 80%"
+            disabled="true"
+          >
+            <el-form-item label="头像"
+              ><el-avatar :size="100" :src="userDetail.avatarURL" />
+            </el-form-item>
+            <el-form-item label="姓名">
+              <el-input v-model="userDetail.username" />
+            </el-form-item>
+            <el-form-item label="昵称">
+              <el-input v-model="userDetail.nickname" />
+            </el-form-item>
+            <el-form-item label="性别">
+              <el-input v-model="userDetail.gender" />
+            </el-form-item>
+            <el-form-item label="个人介绍">
+              <el-input
+                autosize="true"
+                type="textarea"
+                v-model="userDetail.introduction"
+              />
+            </el-form-item>
+          </el-form>
+        </div>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="detailBoxVisible = false">关闭</el-button>
+          </span>
+        </template>
+      </el-dialog>
     </div>
   </div>
 </template>
