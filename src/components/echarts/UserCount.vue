@@ -28,7 +28,7 @@ onMounted(() => {
     },
     xAxis: {
       type: 'category',
-      boundaryGap: false,
+      // boundaryGap: true,
       data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     },
     yAxis: {
@@ -38,21 +38,21 @@ onMounted(() => {
       {
         name: '儿童',
         type: 'line',
-        stack: 'Total',
+        // stack: 'Total',
         data: [120, 132, 101, 134, 90, 230, 210],
         smooth: true
       },
       {
         name: '志愿者',
         type: 'line',
-        stack: 'Total',
+        // stack: 'Total',
         data: [220, 182, 191, 234, 290, 330, 310],
         smooth: true
       },
       {
         name: '捐助者',
         type: 'line',
-        stack: 'Total',
+        // stack: 'Total',
         data: [150, 232, 201, 154, 190, 330, 410],
         smooth: true
       }
@@ -64,7 +64,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="echartsRef" style="width: 600px; height: 400px"></div>
+  <div ref="echartsRef" style="width: 715px; height: 450px"></div>
 </template>
 
 <style scoped></style>

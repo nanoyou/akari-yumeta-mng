@@ -7,7 +7,7 @@ onMounted(() => {
   var myChart = echarts.init(echartsRef.value)
   const option = {
     title: {
-      text: '近一周访问量统计',
+      text: '捐物统计',
       left: 'center'
     },
     tooltip: {
@@ -16,32 +16,25 @@ onMounted(() => {
         type: 'shadow'
       }
     },
+    legend: {},
     grid: {
       left: '3%',
       right: '4%',
       bottom: '3%',
       containLabel: true
     },
-    xAxis: [
-      {
-        type: 'category',
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        axisTick: {
-          alignWithLabel: true
-        }
-      }
-    ],
-    yAxis: [
-      {
-        type: 'value'
-      }
-    ],
+    xAxis: {
+      type: 'value',
+      boundaryGap: [0, 0.01]
+    },
+    yAxis: {
+      type: 'category',
+      data: ['书籍', '文具', '衣物', '食品']
+    },
     series: [
       {
-        name: '访问量',
         type: 'bar',
-        barWidth: '60%',
-        data: [10, 52, 200, 334, 390, 330, 220]
+        data: [382, 139, 234, 97]
       }
     ]
   }

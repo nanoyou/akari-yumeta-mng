@@ -7,7 +7,7 @@ onMounted(() => {
   var myChart = echarts.init(echartsRef.value)
   const option = {
     title: {
-      text: '近一周访问量统计',
+      text: '近半年月均捐款额统计',
       left: 'center'
     },
     tooltip: {
@@ -22,10 +22,15 @@ onMounted(() => {
       bottom: '3%',
       containLabel: true
     },
+    toolbox: {
+      feature: {
+        saveAsImage: {}
+      }
+    },
     xAxis: [
       {
         type: 'category',
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        data: ['6月', '7月', '8月', '9月', '10月', '11月'],
         axisTick: {
           alignWithLabel: true
         }
@@ -38,10 +43,10 @@ onMounted(() => {
     ],
     series: [
       {
-        name: '访问量',
+        name: '捐款额(单位:元)',
         type: 'bar',
         barWidth: '60%',
-        data: [10, 52, 200, 334, 390, 330, 220]
+        data: [4329, 3247, 2753, 4814, 5357, 3279]
       }
     ]
   }
@@ -50,7 +55,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="echartsRef" style="width: 340px; height: 180px"></div>
+  <div ref="echartsRef" style="width: 345px; height: 210px"></div>
 </template>
 
 <style scoped></style>

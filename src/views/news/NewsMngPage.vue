@@ -58,10 +58,12 @@ const publish = () => {
   if (!drawerData.value.id) {
     drawerData.value.id = 100
   }
+  drawerData.value.coverImage = imageUrl.value
   newsData.value.push(drawerData.value)
   clearDrawer()
   drawerVisible.value = false
 }
+
 const cancel = () => {
   ElMessageBox.confirm('关闭后已编辑的内容会被重置,是否关闭?', 'Warning', {
     confirmButtonText: '关闭',
@@ -84,15 +86,14 @@ const handleEdit = (row: any) => {
   console.log(row)
   if (row.id) {
     drawerData.value = row
+    imageUrl.value = row.coverImage
   }
   drawerVisible.value = true
 }
 
 // cover change
 const coverChange = (uploadFile: any) => {
-  // console.log(uploadFile)
   imageUrl.value = URL.createObjectURL(uploadFile.raw)
-  drawerData.value.coverImage = uploadFile.raw
 }
 
 // news detail
@@ -164,16 +165,6 @@ const viewDetails = (row: any) => {
           </template>
         </el-table-column>
       </el-table>
-    </div>
-
-    <!-- pagination -->
-    <div class="pagination">
-      <el-pagination
-        background
-        layout="prev, pager, next, jumper, total"
-        :total="300"
-        :page-size="6"
-      />
     </div>
 
     <!-- edit drawer -->
@@ -263,18 +254,10 @@ const viewDetails = (row: any) => {
   max-width: 100%;
   max-height: 100%;
 }
-
-.pagination {
-  display: flex;
-  margin-top: 25px;
-  justify-content: center;
-}
-
 .news-cover {
   width: 200px;
   height: 200px;
 }
-
 .form-container {
   width: 100%;
 }

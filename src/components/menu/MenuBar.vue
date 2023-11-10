@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import router from '@/router'
 const menuItems = [
   { route: '/home', icon: 'House', title: '首页' },
   {
@@ -17,6 +18,10 @@ const menuItems = [
   { route: '/interaction', icon: 'Connection', title: '交互任务分配' },
   { route: '/personal', icon: 'Setting', title: '个人信息' }
 ]
+const logout = () => {
+  // TODO:登出
+  router.push('/login')
+}
 </script>
 
 <template>
@@ -44,6 +49,10 @@ const menuItems = [
         >
       </el-sub-menu>
     </template>
+    <el-menu-item @click="logout">
+      <el-icon><CloseBold /></el-icon>
+      <span>退出登录</span>
+    </el-menu-item>
   </el-menu>
 </template>
 

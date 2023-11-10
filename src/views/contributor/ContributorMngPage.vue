@@ -11,6 +11,7 @@ const childrenData = [
     introduction: 'ipsum sunt nulla officia amet',
     avatarURL: 'http://localhost:5173/src/assets/logo.png',
     score: 100,
+    state: true,
     donationAmount: 100050
   }
 ]
@@ -76,14 +77,6 @@ const formatDuration = (sec: number) => {
           </template>
         </el-table-column>
       </el-table>
-    </div>
-    <div class="pagination">
-      <el-pagination
-        background
-        layout="prev, pager, next, jumper, total"
-        :total="300"
-        :page-size="6"
-      />
     </div>
   </div>
 </template>
