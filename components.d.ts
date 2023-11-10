@@ -45,6 +45,7 @@ declare module 'vue' {
     ElUpload: typeof import('element-plus/es')['ElUpload']
     GeoDistribution: typeof import('./src/components/echarts/GeoDistribution.vue')['default']
     GoodsCategory: typeof import('./src/components/echarts/GoodsCategory.vue')['default']
+    HotKey: typeof import('./src/components/echarts/HotKey.vue')['default']
     MenuBar: typeof import('./src/components/menu/MenuBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -52,5 +53,6 @@ declare module 'vue' {
     UsePeriod: typeof import('./src/components/echarts/UsePeriod.vue')['default']
     UserCount: typeof import('./src/components/echarts/UserCount.vue')['default']
     VisitRecord: typeof import('./src/components/echarts/VisitRecord.vue')['default']
+    VisitRocord: typeof import('./src/components/echarts/VisitRocord.vue')['default']
   }
 }

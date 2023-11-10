@@ -1,27 +1,95 @@
-option = {
+  var myChart = echarts.init(echartsRef.value)
+  function randomData() {
+    now = new Date(+now + oneDay)
+    value = value + Math.random() * 21 - 10
+    return {
+      name: now.toString(),
+      value: [
+        [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'),
+        // [now.getHours(), now.getMinutes() + 1, now.getSeconds()].join(':'),
+        Math.round(value)
+      ]
+    }
+  }
+  let data: any = []
+  let now = new Date(+new Date() - 60 * 1000)
+  // let oneDay = 24 * 3600 * 1000
+  let oneDay = 1000
+  let value = Math.random() * 100
+  for (var i = 0; i < 60; i++) {
+    data.push(randomData())
+  }
+  let option = {
     title: {
-      text: '近一月用户数量变化图',
+      text: '当前应用访问量',
       left: 'center'
+    },
+    tooltip: {
+      trigger: 'axis',
+      formatter: function (params: any) {
+        params = params[0]
+        var date = new Date(params.name)
+        return (
+          (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) +
+          ':' +
+          (date.getMinutes() < 10
+            ? '0' + date.getMinutes()
+            : date.getMinutes()) +
+          ':' +
+          (date.getSeconds() < 10
+            ? '0' + date.getSeconds()
+            : date.getSeconds()) +
+          ' ' +
+          params.value[1]
+        )
+      },
+      axisPointer: {
+        animation: false
+      }
     },
     xAxis: {
       type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      data: data.map(function (item: any) {
+        var date = new Date(item.name)
+        return (
+          (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) +
+          ':' +
+          (date.getMinutes() < 10
+            ? '0' + date.getMinutes()
+            : date.getMinutes()) +
+          ':' +
+          (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds())
+        )
+      }),
+      splitLine: {
+        show: false
+      }
     },
     yAxis: {
-      type: 'value'
+      type: 'value',
+      boundaryGap: [0, '100%'],
+      splitLine: {
+        show: false
+      }
     },
     series: [
       {
-        data: [820, 932, 901, 934, 1290, 1330, 1320],
+        name: '访问量',
         type: 'line',
-        smooth: true,
-        itemStyle: {
-          normal: {
-            label: {
-              show: true
-            }
-          }
-        }
+        showSymbol: false,
+        data: data
       }
     ]
   }
+  setInterval(function () {
+    data.shift()
+    data.push(randomData())
+    myChart.setOption({
+      series: [
+        {
+          data: data
+        }
+      ]
+    })
+  }, 1000)
+  myChart.setOption(option)

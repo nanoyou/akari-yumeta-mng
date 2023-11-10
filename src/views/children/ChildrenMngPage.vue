@@ -136,7 +136,7 @@ const viewDetail = (row: any) => {
         <el-table-column fixed="right" label="操作">
           <template #default="{ row }">
             <el-button link type="primary" size="small" @click="viewDetail(row)"
-              >留守儿童详情</el-button
+              >详情</el-button
             >
           </template>
         </el-table-column>
