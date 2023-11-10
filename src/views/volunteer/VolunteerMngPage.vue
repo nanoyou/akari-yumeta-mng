@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { Check, Close } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
-const volunteerData = [
+const defaultData = [
   {
     id: '22',
     username: '胡芳',
@@ -53,6 +53,7 @@ const volunteerData = [
     state: true
   }
 ]
+const showData = ref(defaultData)
 
 // format the gender display mode
 const getGender = (genderStr: string) => {
@@ -94,13 +95,92 @@ const viewDetail = (row: any) => {
   userDetail.value = row
   detailBoxVisible.value = true
 }
+
+// search box data
+const searchCondition = ref({
+  nickname: '',
+  username: '',
+  gender: '',
+  state: ''
+})
+const clear = () => {
+  searchCondition.value = {
+    username: '',
+    nickname: '',
+    gender: '',
+    state: ''
+  }
+}
+const query = () => {
+  console.log(searchCondition.value)
+  showData.value = defaultData.filter((item) => {
+    // username
+    if (searchCondition.value.username) {
+      console.log('username')
+      if (!item.username.includes(searchCondition.value.username)) {
+        return false
+      }
+    }
+    // nickname
+    if (searchCondition.value.nickname) {
+      console.log('nickname')
+      if (!item.nickname.includes(searchCondition.value.nickname)) {
+        return false
+      }
+    }
+    // gender
+    if (searchCondition.value.gender) {
+      console.log('gender')
+      if (!(searchCondition.value.gender === item.gender)) {
+        return false
+      }
+    }
+    // state
+    if (searchCondition.value.state) {
+      if (searchCondition.value.state === 'true' && !item.state) {
+        return false
+      }
+      if (searchCondition.value.state === 'false' && item.state) {
+        return false
+      }
+    }
+    return true
+  })
+}
 </script>
 
 <template>
   <div>
-    <div class="search">条件搜索</div>
+    <div class="search">
+      <el-form :inline="true" :model="searchCondition" class="demo-form-inline">
+        <el-form-item label="昵称">
+          <el-input v-model="searchCondition.nickname" clearable />
+        </el-form-item>
+        <el-form-item label="用户名">
+          <el-input v-model="searchCondition.username" clearable />
+        </el-form-item>
+        <el-form-item label="性别">
+          <el-select v-model="searchCondition.gender" clearable>
+            <el-option label="男" value="MALE" />
+            <el-option label="女" value="FEMALE" />
+            <el-option label="保密" value="SECRET" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="是否可用">
+          <el-select v-model="searchCondition.state" clearable>
+            <el-option label="可用" value="true" />
+            <el-option label="禁用" value="false" />
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="clear">清空</el-button>
+          <el-button type="primary" @click="query">查询</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+
     <div class="table">
-      <el-table :data="volunteerData" style="width: 100%" max-height="655px">
+      <el-table :data="showData" style="width: 100%" max-height="655px">
         <el-table-column type="index" label="序号" width="80" />
         <el-table-column prop="nickname" label="昵称" />
         <el-table-column prop="username" label="用户名" />
@@ -114,7 +194,7 @@ const viewDetail = (row: any) => {
             <el-tag>{{ getGender(row.gender) }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="usageDuration" label="使用时长">
+        <el-table-column prop="usageDuration" label="志愿时长">
           <template #default="{ row }">
             {{ formatDuration(row.usageDuration) }}
           </template>
@@ -132,7 +212,7 @@ const viewDetail = (row: any) => {
         <el-table-column fixed="right" label="操作">
           <template #default="{ row }">
             <el-button link type="primary" size="small" @click="viewDetail(row)"
-              >志愿者详情</el-button
+              >详情</el-button
             >
           </template>
         </el-table-column>
@@ -140,7 +220,7 @@ const viewDetail = (row: any) => {
     </div>
 
     <div class="detail-dialog">
-      <el-dialog v-model="detailBoxVisible" title="用户详情">
+      <el-dialog v-model="detailBoxVisible" title="志愿者详情">
         <div class="detail">
           <el-form
             label-position="right"

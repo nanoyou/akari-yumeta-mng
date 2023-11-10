@@ -7,34 +7,48 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import '@vueup/vue-quill/dist/vue-quill.bubble.css'
 
 // 新闻数据
-const newsData = ref({})
-newsData.value = [
+const defaultData = [
   {
     id: '22',
-    title: '新闻标题',
+    title: '国内-新闻标题',
     publishTime: '2023-10-19',
-    content: 'content',
+    content:
+      '<h1>一级标题</h1><h2>二级标题</h2><h3>三级标题</h3><p>正文</p><p><strong>粗体</strong></p><p><em>斜体</em></p><p><u>下划线</u></p><p><a href="http://localhost:5173/" rel="noopener noreferrer" target="_blank"><u>http://localhost:5173/</u></a></p>',
     coverImage: 'http://localhost:5173/src/assets/logo.png',
-    tag: '实时新闻',
+    tag: '国内新闻',
     state: true
+  },
+  {
+    id: '23',
+    title: '国外-新闻标题',
+    publishTime: '2023-11-08',
+    content:
+      '<h1>一级标题</h1><h2>二级标题</h2><h3>三级标题</h3><p><em>有序列表：</em></p><ol><li>有序列表</li><li>有序列表</li></ol><p><em>无序列表：</em></p><ul><li>无序列表</li><li>无序列表</li></ul>',
+    coverImage: 'http://localhost:5173/src/assets/logo.png',
+    tag: '国际新闻',
+    state: false
   }
 ]
 
+const showData = ref(defaultData)
+
 // 改变发布状态
 const stateChange = (row: any) => {
-  console.log(row.id + '  ' + row.state)
   ElMessage.success('已' + (row.state ? '开启' : '关闭') + '推送')
 }
 
 // 删除新闻
 const deleteNews = (id: number) => {
-  ElMessageBox.confirm('是否要删除该新闻?', 'Warning', {
+  ElMessageBox.confirm('删除后无法恢复,是否要删除该新闻?', '警告', {
     confirmButtonText: '确认',
     cancelButtonText: '取消',
     type: 'warning'
   })
     .then(() => {
       console.log('删除 ===> ' + id)
+      let index = defaultData.findIndex((item) => item.id === id)
+      defaultData.splice(index, 1)
+      query()
       ElMessage({
         type: 'success',
         message: '删除新闻成功'
@@ -49,19 +63,47 @@ const deleteNews = (id: number) => {
 }
 
 // 添加、编辑Drawer
-const drawerVisible = ref(false)
-const drawerData = ref({})
+let drawerVisible = false
+let drawerData = ref({})
 const imageUrl = ref('')
 const editor = ref()
 const publish = () => {
-  // TODO:send request, add or update
-  if (!drawerData.value.id) {
-    drawerData.value.id = 100
-  }
   drawerData.value.coverImage = imageUrl.value
-  newsData.value.push(drawerData.value)
+  if (drawerData.value.id) {
+    // update
+    let index = defaultData.findIndex((item) => item.id === drawerData.value.id)
+    defaultData[index] = { ...drawerData.value }
+    ElMessage({
+      type: 'success',
+      message: '编辑新闻成功'
+    })
+  } else {
+    // add
+    drawerData.value.id =
+      Math.round(Math.random() * 1000) +
+      '-' +
+      Math.round(Math.random() * 1000) +
+      '-' +
+      Math.round(Math.random() * 1000)
+    drawerData.value.state = true
+    const now = new Date()
+    drawerData.value.publishTime =
+      now.getFullYear() +
+      '-' +
+      (now.getMonth() + 1 < 10
+        ? '0' + (now.getMonth() + 1)
+        : now.getMonth() + 1) +
+      '-' +
+      now.getDate()
+    defaultData.push(drawerData.value)
+    ElMessage({
+      type: 'success',
+      message: '新增新闻成功'
+    })
+  }
   clearDrawer()
-  drawerVisible.value = false
+  drawerVisible = false
+  query()
 }
 
 const cancel = () => {
@@ -78,17 +120,25 @@ const clearDrawer = () => {
   drawerData.value = {}
   imageUrl.value = ''
   editor.value.setHTML('')
-  drawerVisible.value = false
+  drawerVisible = false
 }
 
 // edit news
 const handleEdit = (row: any) => {
-  console.log(row)
   if (row.id) {
-    drawerData.value = row
+    // update
+    drawerData.value = { ...row }
     imageUrl.value = row.coverImage
+  } else {
+    // add
+    drawerData.value = {
+      title: '',
+      content: '',
+      coverImage: '',
+      tag: ''
+    }
   }
-  drawerVisible.value = true
+  drawerVisible = true
 }
 
 // cover change
@@ -102,7 +152,47 @@ const newsDetail = ref({})
 const viewDetails = (row: any) => {
   detailVisible.value = true
   newsDetail.value = row.content
-  console.log(row.content)
+}
+
+// search box data
+const searchCondition = ref({
+  title: '',
+  tag: '',
+  state: ''
+})
+const clear = () => {
+  searchCondition.value = {
+    title: '',
+    tag: '',
+    state: ''
+  }
+}
+const query = () => {
+  showData.value = defaultData.filter((item) => {
+    // title
+    if (searchCondition.value.title) {
+      if (!item.title.includes(searchCondition.value.title)) {
+        return false
+      }
+    }
+    // tag
+    if (searchCondition.value.tag) {
+      if (!item.tag.includes(searchCondition.value.tag)) {
+        return false
+      }
+    }
+
+    // state
+    if (searchCondition.value.state) {
+      if (searchCondition.value.state === 'true' && !item.state) {
+        return false
+      }
+      if (searchCondition.value.state === 'false' && item.state) {
+        return false
+      }
+    }
+    return true
+  })
 }
 </script>
 
@@ -110,15 +200,38 @@ const viewDetails = (row: any) => {
   <div>
     <!-- search and add div -->
     <div class="head">
-      <div class="search">条件搜索</div>
+      <div class="search">
+        <el-form
+          :inline="true"
+          :model="searchCondition"
+          class="demo-form-inline"
+        >
+          <el-form-item label="新闻标题">
+            <el-input v-model="searchCondition.title" clearable />
+          </el-form-item>
+          <el-form-item label="标签">
+            <el-input v-model="searchCondition.tag" clearable />
+          </el-form-item>
+          <el-form-item label="是否推送">
+            <el-select v-model="searchCondition.state" clearable>
+              <el-option label="推送" value="true" />
+              <el-option label="不推送" value="false" />
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="clear">清空</el-button>
+            <el-button type="primary" @click="query">查询</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
       <div class="add-news">
-        <el-button type="primary" @click="handleEdit">新增</el-button>
+        <el-button type="success" @click="handleEdit">新增</el-button>
       </div>
     </div>
 
     <!-- data table -->
     <div class="table">
-      <el-table :data="newsData" style="width: 100%" max-height="655px">
+      <el-table :data="showData" style="width: 100%" max-height="655px">
         <el-table-column type="index" label="序号" width="80" />
         <el-table-column prop="title" label="标题" />
         <el-table-column prop="coverImage" label="封面">
@@ -242,7 +355,7 @@ const viewDetails = (row: any) => {
   </div>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
 .table {
   display: flex;
   justify-content: center;
@@ -280,8 +393,13 @@ const viewDetails = (row: any) => {
 }
 
 .head {
-  padding-right: 100px;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
+  .add-news {
+    padding-right: 135px;
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 </style>

@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 const hotKeys = ref()
 onMounted(() => {
-  // 模拟从后端获取到请求结果
+  // TODO:模拟从后端获取到请求结果
   setTimeout(() => {
     hotKeys.value = [
       { key: '习近平谈治国理政', count: 98 },
