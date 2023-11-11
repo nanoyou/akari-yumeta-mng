@@ -11,7 +11,7 @@ onMounted(() => {
       { key: '应对自然灾害', count: 60 },
       { key: '食品安全', count: 54 },
       { key: '上大学', count: 32 },
-      { key: '考试成绩哦', count: 20 },
+      { key: '考试成绩', count: 20 },
       { key: '哲学思想在生活中的体现', count: 12 }
     ]
   }, 500)
