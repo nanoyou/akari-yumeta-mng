@@ -311,7 +311,7 @@ const query = () => {
                 :on-change="coverChange"
               >
                 <img v-if="imageUrl" :src="imageUrl" class="news-cover" />
-                <el-icon v-else class="avatar-uploader-icon">
+                <el-icon v-else class="avatar-uploader-icon news-cover border">
                   <Plus />
                 </el-icon> </el-upload
             ></el-form-item>
@@ -370,6 +370,10 @@ const query = () => {
 .news-cover {
   width: 200px;
   height: 200px;
+  border-radius: 8px;
+}
+.border {
+  border: 1px solid #dcdfe6;
 }
 .form-container {
   width: 100%;

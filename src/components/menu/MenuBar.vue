@@ -13,9 +13,7 @@ const menuItems = [
     ]
   },
   { route: '/news', icon: 'Document', title: '新闻推送' },
-  { route: '/donation', icon: 'Coin', title: '捐款捐物分配' },
   { route: '/learning', icon: 'EditPen', title: '学习任务发布' },
-  { route: '/interaction', icon: 'Connection', title: '交互任务分配' },
   { route: '/personal', icon: 'Setting', title: '个人信息' }
 ]
 const logout = () => {

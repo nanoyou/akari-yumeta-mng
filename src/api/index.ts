@@ -1,7 +1,9 @@
+import router from '@/router'
 import { useUserStore } from '@/stores'
 import axios from 'axios'
+import { ElMessage } from 'element-plus'
 
-const baseURL = 'http://127.0.0.1'
+const baseURL = 'http://104.156.230.230:8080'
 
 const instance = axios.create({
   baseURL,
@@ -21,8 +23,13 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (res) => {
-    console.log(res)
-    // fail
+    // success
+    if (res.data.code === 0) {
+      ElMessage.success(res.data.message)
+      router.push('/')
+      return res
+    }
+    ElMessage.error(res.data.message)
     return Promise.reject(res.data)
   },
   (err) => {

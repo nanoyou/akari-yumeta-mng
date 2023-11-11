@@ -28,11 +28,6 @@ const routes = [
         component: () => import('@/views/contributor/ContributorMngPage.vue')
       },
       {
-        path: '/donation',
-        name: 'donation',
-        component: () => import('@/views/donation/DonationMngPage.vue')
-      },
-      {
         path: '/news',
         name: 'news',
         component: () => import('@/views/news/NewsMngPage.vue')
@@ -42,12 +37,6 @@ const routes = [
         name: 'learning',
         component: () => import('@/views/learning/LearningTasksPage.vue')
       },
-      {
-        path: '/interaction',
-        name: 'interaction',
-        component: () => import('@/views/interaction/InteractiveTaskPage.vue')
-      },
-
       {
         path: '/personal',
         name: 'personal',

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import router from '@/router'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import axios from '@/api'
 
 const loginForm = ref({
   username: '',
@@ -10,16 +10,30 @@ const loginForm = ref({
 const rules = reactive({
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 3, max: 5, message: '密码长度为?', trigger: 'blur' }
+    { min: 3, max: 10, message: '密码长度为?', trigger: 'blur' }
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 3, max: 5, message: '密码长度为?', trigger: 'blur' }
+    { min: 3, max: 10, message: '密码长度为?', trigger: 'blur' }
   ]
 })
 const login = () => {
-  // TODO:完成登录逻辑
-  router.push('/')
+  var config = {
+    method: 'post',
+    url: '/login/admin',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: loginForm.value
+  }
+  axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data))
+      router.push('/')
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
 }
 </script>
 
@@ -32,7 +46,6 @@ const login = () => {
       status-icon
       :rules="rules"
       class="login-form"
-      autocomplete="off"
     >
       <el-form-item prop="username">
         <el-input

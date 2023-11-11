@@ -6,7 +6,7 @@
       <el-header class="header">
         <div class="flex">
           <div class="flex">
-            <img class="logo" src="../../assets/logo.png" alt="logo" />
+            <img class="logo" src="../../assets/logo.svg" alt="logo" />
             <div class="project-name">明光筑梦</div>
           </div>
           <h1 class="title">后台管理系统</h1>
